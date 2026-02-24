@@ -5,12 +5,17 @@ const cors = require("cors");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");//imported n connected authRoutes
 dotenv.config(); // This loads our secret variables from .env file
+const productRoutes = require('./routes/productRoutes');
+const orderRoutes = require('./routes/orderRoutes');
+
 
 const app = express();
 // Middleware - allows our server to understand JSON data
 app.use(cors());
 app.use(express.json());
 app.use("/api/auth", authRoutes);
+app.use('/api/products', productRoutes);
+app.use('/api/orders', orderRoutes);
 
 app.use("/uploads", express.static("uploads"));// This makes our uploads folder publicly accessible (for images)
 

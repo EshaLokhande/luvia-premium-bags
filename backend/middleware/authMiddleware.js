@@ -1,5 +1,5 @@
 // checks if user is logged in (security guard)
-const jwt = require("jasonwebtoken");
+const jwt = require("jsonwebtoken");
 const User = require("../models/User");
 
 //PROTECT - checks if user is logged in (Hey, I'm the security guard named protect")
@@ -27,10 +27,12 @@ const protect = async (req, res, next) => {
     }
 };
 
-const adminOnly = (req, res, isAdmin) => {
+const adminOnly = (req, res, next) => {
     if (req.user && req.user.isAdmin) {
         next();
     } else {
         return res.status(401).json({ message: 'Admins only' });
     }
 };
+
+module.exports = { protect, adminOnly };
