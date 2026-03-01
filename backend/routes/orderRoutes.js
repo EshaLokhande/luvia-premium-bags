@@ -26,7 +26,8 @@ router.post('/', protect, async (req, res) => {
             user: req.user._id
         });
         
-        res.status(201).json(order);
+        const savedOrder = await order.save();
+        res.status(201).json(savedOrder);
     } catch (error) {
         res.status(400).json({ message: error.message })
     }
@@ -144,8 +145,7 @@ module.exports = router;
 
 
 //MethodWhat it doesExample
-// GET Read/fetch dataGet all products
-// POST Create new dataPlace new order
-// PUT
-// Update existing dataUpdate order status
-// DELETEDelete dataDelete product
+// GET    Read/fetch dataGet all products
+// POST   Create new dataPlace new order
+// PUT    Update existing dataUpdate order status
+// DELETE    Delete dataDelete product

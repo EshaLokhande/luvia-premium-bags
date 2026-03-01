@@ -35,9 +35,9 @@ const productSchema = new mongoose.Schema({
     },
     isPaid: {
         type: Boolean,
-        deafault: false
+        default: false
     }
-}, { timestamp: true });
+}, { timestamps: true });
 
 
 module.exports = mongoose.model("Order", productSchema);
