@@ -19,13 +19,14 @@ export const CartProvider = ({ children }) => {
     // .find() searches through cartItems array
     // returns the item if found, undefined if not found
     const addToCart = (product) => {
-        const exists = cartItems.find(item => item.id === product.id);
+        const productId = product._id || product.id;
+        const exists = cartItems.find(item => (item._id || item.id) === productId);
         if (exists) {
             // .map() loops through every item
             // if item matches → increase its quantity
             // if item doesn't match → keep it same (: item)
             // ...item = copy everything, just change quantity
-            setCartItems(cartItems.map(item => item.id === product.id
+            setCartItems(cartItems.map(item => (item._id || item.id) === productId
                 ?
                 { ...item, quantity: item.quantity + 1 }
                 : item,
@@ -44,17 +45,20 @@ export const CartProvider = ({ children }) => {
     }
 
     const increaseQuantity = (id) => {
-        setCartItems(cartItems.map(item => item.id === id ? { ...item, quantity: item.quantity + 1 } : item))
+        setCartItems(cartItems.map(item => (item._id || item.id) === id ? { ...item, quantity: item.quantity + 1 } : item))
     }
 
     const decreaseQuantity = (id) => {
          // found item AND quantity is more than 1 → decrease
-        setCartItems(cartItems.map(item => item.id === id && item.quantity > 1
+        setCartItems(cartItems.map(item => (item._id || item.id) === id && item.quantity > 1
         ?
         { ...item, quantity: item.quantity - 1 }
         : item));
         // either not this item OR quantity is already 1 → keep same
     }
+
+    const increaseQty = increaseQuantity;
+    const decreaseQty = decreaseQuantity;
 
     const clearCart = () => {
         setCartItems([]);
@@ -70,6 +74,8 @@ export const CartProvider = ({ children }) => {
             removeFromCart,
             increaseQuantity,
             decreaseQuantity,
+            increaseQty,
+            decreaseQty,
             clearCart,
             totalPrice,
             totalItems

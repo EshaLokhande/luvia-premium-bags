@@ -1,0 +1,431 @@
+🔐 AuthContext — Control Flow
+App starts
+        ↓
+AuthProvider wraps whole app
+        ↓
+useState checks localStorage
+"Is there a saved user?"
+        ↓
+YES → user = saved user data
+      (stays logged in after refresh!)
+        ↓
+NO → user = null
+     (not logged in)
+        ↓
+Any component calls useAuth()
+        ↓
+Gets user, login, logout instantly!
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+LOGIN FUNCTION FLOW:
+login(userData) called
+        ↓
+localStorage.setItem('user', userData)
+saves in browser permanently
+        ↓
+setUser(userData)
+updates state
+        ↓
+whole app re-renders
+navbar shows "Hi Esha!"
+protected routes unlock!
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+LOGOUT FUNCTION FLOW:
+logout() called
+        ↓
+localStorage.removeItem('user')
+deleted from browser
+        ↓
+setUser(null)
+        ↓
+whole app re-renders
+navbar shows Login/Register again
+protected routes lock!
+
+-------------------------------------------------------------------------------------
+
+
+🛒 CartContext — Control Flow
+App starts
+        ↓
+CartProvider wraps whole app
+        ↓
+cartItems = [] (empty cart)
+        ↓
+Any component calls useCart()
+Gets cartItems, addToCart, etc!
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+ADD TO CART FLOW:
+User clicks "Add To Cart"
+        ↓
+addToCart(product) called
+        ↓
+Is product already in cart?
+        ↓
+YES → find that item
+      increase quantity by 1
+      cartItems updated!
+        ↓
+NO → add new item
+     with quantity = 1
+     cartItems updated!
+        ↓
+Navbar cart count updates automatically!
+totalItems recalculates!
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+REMOVE FROM CART FLOW:
+User clicks ❌ on cart item
+        ↓
+removeFromCart(id) called
+        ↓
+filter removes that item
+        ↓
+cartItems updated!
+totalItems recalculates!
+
+━━━━━━━━━━━━━━━━━━━━━━━
+
+CLEAR CART FLOW:
+Order placed successfully
+        ↓
+clearCart() called
+        ↓
+cartItems = []
+        ↓
+Cart is empty again!
+Navbar shows 🛒 (0)
+
+-------------------------------------------------------------------------
+
+
+🔐 LoginPage — Control Flow
+User visits /login
+        ↓
+LoginPage component loads
+        ↓
+States initialized:
+email = ''
+password = ''
+error = ''
+loading = false
+        ↓
+User types email
+onChange fires
+setEmail(value) updates state
+        ↓
+User types password
+onChange fires
+setPassword(value) updates state
+        ↓
+User clicks LOGIN button
+        ↓
+handleSubmit(e) runs
+        ↓
+e.preventDefault()
+stops page reload
+        ↓
+setLoading(true)
+button shows "Logging in..."
+button disabled!
+        ↓
+axios.post('/api/auth/login')
+sends email + password to backend
+        ↓
+BACKEND PROCESSING:
+finds user by email
+compares password with bcrypt
+        ↓
+WRONG CREDENTIALS?
+catch block runs
+setError("Invalid email or password!")
+red error box appears on screen
+setLoading(false)
+        ↓
+CORRECT CREDENTIALS?
+data comes back with token
+login(data) → saved in context
+navigate('/') → goes to home!
+setLoading(false)
+
+
+
+--------------------------------------------------------------------
+
+📝 RegisterPage — Control Flow
+User visits /register
+        ↓
+RegisterPage component loads
+        ↓
+States initialized:
+name = ''
+email = ''
+password = ''
+confirmPassword = ''
+error = ''
+loading = false
+        ↓
+User fills all 4 inputs
+each onChange updates state
+        ↓
+User clicks REGISTER button
+        ↓
+handleSubmit(e) runs
+        ↓
+e.preventDefault()
+stops page reload
+        ↓
+PASSWORD CHECK:
+password === confirmPassword?
+        ↓
+NO → setError('Passwords do not match!')
+     red box shows
+     function STOPS (return)
+     API never called!
+        ↓
+YES → continue
+        ↓
+setLoading(true)
+button shows "Creating Account..."
+        ↓
+axios.post('/api/auth/register')
+sends name + email + password
+        ↓
+BACKEND PROCESSING:
+checks if email exists
+hashes password with bcrypt
+saves new user to MongoDB
+sends back user + token
+        ↓
+EMAIL EXISTS?
+catch block runs
+setError("Email already registered!")
+red box shows
+        ↓
+SUCCESS?
+login(data) → auto logged in!
+navigate('/') → goes to home!
+
+
+------------------------------------------------------------------------------
+
+
+🏠 HomePage — Control Flow
+User visits /
+        ↓
+HomePage component loads
+        ↓
+States initialized:
+products = []
+loading = true
+        ↓
+useEffect runs automatically
+(because page just loaded)
+        ↓
+fetchProducts() called
+        ↓
+axios.get('/api/products')
+gets ALL products from backend
+        ↓
+data.slice(0, 4)
+takes only FIRST 4 products
+        ↓
+setProducts(first 4 products)
+setLoading(false)
+        ↓
+Page re-renders with products!
+        ↓
+User sees:
+- Hero section (black)
+- 4 featured products grid
+- Features section
+- Footer
+        ↓
+User clicks "Add To Cart"
+        ↓
+addToCart(product) runs
+CartContext updates!
+Navbar cart count increases!
+        ↓
+User clicks "View Details"
+        ↓
+navigate to /products/abc123
+ProductDetailPage loads!
+        ↓
+User clicks "SHOP NOW"
+        ↓
+navigate to /products
+ProductsPage loads!
+
+------------------------------------------------------------------------
+🛍️ ProductsPage — Control Flow
+User visits /products
+        ↓
+ProductsPage loads
+        ↓
+States initialized:
+products = []
+loading = true
+search = ''
+category = 'All'
+        ↓
+useEffect runs
+fetchProducts() called
+        ↓
+axios.get('/api/products')
+gets ALL products
+        ↓
+setProducts(all products)
+setLoading(false)
+        ↓
+Page shows all products in grid!
+        ↓
+━━━━━━━━━━━━━━━━━━━━━━━
+
+SEARCH FLOW:
+User types in search box
+        ↓
+onChange → setSearch(value)
+        ↓
+filteredProducts recalculates!
+        ↓
+product.name.toLowerCase()
+.includes(search.toLowerCase())
+        ↓
+Only matching products show!
+        ↓
+━━━━━━━━━━━━━━━━━━━━━━━
+
+CATEGORY FILTER FLOW:
+User clicks "Tote" button
+        ↓
+setCategory('Tote')
+        ↓
+filteredProducts recalculates!
+        ↓
+only Tote bags show!
+button turns black (active)
+        ↓
+━━━━━━━━━━━━━━━━━━━━━━━
+
+SEARCH + FILTER TOGETHER:
+filteredProducts checks BOTH:
+        ↓
+matchesSearch = name has search text?
+matchesCategory = right category?
+        ↓
+BOTH must be true to show product!
+
+
+
+------------------------------------------------------------------
+🔍 ProductDetailPage — Control Flow
+User clicks "View Details"
+        ↓
+navigate to /products/abc123
+        ↓
+ProductDetailPage loads
+        ↓
+useParams gets id = "abc123"
+        ↓
+States initialized:
+product = null
+loading = true
+quantity = 1
+added = false
+        ↓
+useEffect runs
+fetchProduct() called
+        ↓
+axios.get('/api/products/abc123')
+        ↓
+Backend finds product by id
+sends product data back
+        ↓
+setProduct(data)
+setLoading(false)
+        ↓
+Page shows product details!
+        ↓
+━━━━━━━━━━━━━━━━━━━━━━━
+
+QUANTITY SELECTOR FLOW:
+User clicks + button
+        ↓
+quantity < stock?
+YES → setQuantity(quantity + 1)
+NO → nothing (can't exceed stock!)
+        ↓
+User clicks - button
+        ↓
+quantity > 1?
+YES → setQuantity(quantity - 1)
+NO → nothing (can't go below 1!)
+        ↓
+━━━━━━━━━━━━━━━━━━━━━━━
+
+ADD TO CART FLOW:
+User clicks "ADD TO CART"
+        ↓
+handleAddToCart() runs
+        ↓
+loop runs 'quantity' times
+addToCart(product) called each time
+CartContext updates!
+        ↓
+setAdded(true)
+green success message shows!
+        ↓
+setTimeout 2000ms
+after 2 seconds
+setAdded(false)
+message disappears!
+        ↓
+━━━━━━━━━━━━━━━━━━━━━━━
+
+BUY NOW FLOW:
+User clicks "BUY NOW"
+        ↓
+handleBuyNow() runs
+        ↓
+handleAddToCart() first
+adds to cart!
+        ↓
+navigate('/cart')
+goes to cart page directly!
+
+
+------------------------------------------------------------------------
+OVERALL APP FLOW
+
+User opens localhost:3000
+        ↓
+App.js loads
+        ↓
+AuthProvider wraps everything
+checks localStorage for user
+        ↓
+CartProvider wraps everything
+cartItems = []
+        ↓
+Navbar renders on every page
+shows Login/Register if not logged in
+shows Hi Esha! + Logout if logged in
+        ↓
+Router decides which page to show
+based on URL
+        ↓
+/ → HomePage
+/products → ProductsPage
+/products/:id → ProductDetailPage
+/login → LoginPage
+/register → RegisterPage
+/cart → CartPage (coming soon!)
+/myorders → MyOrdersPage (coming soon!)
+/admin → AdminPage (coming soon!)
