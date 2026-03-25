@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/cartContext'
 import { useAuth } from '../context/AuthContext'
-
+import API_URL from '../config'
 
 // ============================================
 // WHAT THIS PAGE DOES:
@@ -77,8 +77,10 @@ const CartPage = () => {
 
       // Send order to backend
       // Need token in headers because route is protected!
+      // await axios.post(
+      //   'http://localhost:5000/api/orders',
       await axios.post(
-        'http://localhost:5000/api/orders',
+      `${API_URL}/api/orders`,
         {
           orderItems,
           shippingAddress: { address, city, pincode, phone },
@@ -161,7 +163,8 @@ const CartPage = () => {
 
                 {/* Product Image */}
                 <img
-                  src={`http://localhost:5000/${item.image}`}
+                  // src={`http://localhost:5000/${item.image}`}
+                  src={`${API_URL}/${item.image}`}
                   alt={item.name}
                   className='w-24 h-24 object-cover'
                   // small thumbnail image

@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/cartContext'
 import { useAuth } from '../context/AuthContext'
+import API_URL from '../config'
 
 const ProductDetailPage = () => {
     const { id } = useParams(); // useParams gets the id from URL
@@ -17,9 +18,12 @@ const ProductDetailPage = () => {
         // Fetch product when page loads
         const fetchProduct = async () => {
             try {
-                const { data } = await axios.get(
-                    `http://localhost:5000/api/products/${id}`
-                )
+                // const { data } = await axios.get(
+                //     `http://localhost:5000/api/products/${id}`
+              // )
+              const { data } = await axios.get(
+  `${API_URL}/api/products/${id}`
+)
                 setProduct(data);// Save product in state
             } catch (err) {
                 console.log(err);
@@ -74,7 +78,8 @@ const ProductDetailPage = () => {
           ============================== */}
           <div>
             <img
-              src={`http://localhost:5000/${product.image}`}
+                // src={`http://localhost:5000/${product.image}`}
+                src={`${API_URL}/${product.image}`}
               alt={product.name}
               className='w-full h-96 object-cover'
             />

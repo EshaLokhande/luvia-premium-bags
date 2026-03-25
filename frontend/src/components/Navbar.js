@@ -32,9 +32,14 @@ const Navbar = () => {
         {/* LOGO */}
         <Link
           to='/'
-          className='text-2xl font-bold tracking-widest text-white'
+          className='flex items-center gap-2 text-2xl font-bold tracking-widest text-white'
         >
-          LUVIA 🖤
+          <img
+            src='/bag-logo.svg'
+            alt='LUVIA bag logo'
+            className='h-8 w-8 object-contain'
+          />
+          <span>LUVIA</span>
         </Link>
 
         {/* DESKTOP LINKS - hidden on mobile */}

@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
 import { useAuth } from '../context/AuthContext'
+import API_URL from '../config'
 
 const AdminOrdersPage = () => {
 
@@ -13,8 +14,10 @@ const AdminOrdersPage = () => {
   useEffect(() => {
     const fetchOrders = async () => {
       try {
+        // const { data } = await axios.get(
+          //   'http://localhost:5000/api/orders',
         const { data } = await axios.get(
-          'http://localhost:5000/api/orders',
+  `${API_URL}/api/orders`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`
@@ -34,8 +37,11 @@ const AdminOrdersPage = () => {
   // 3. update order status function
   const updateStatus = async (orderId, newStatus) => {
     try {
-      await axios.put(
-        `http://localhost:5000/api/orders/${orderId}/status`,
+    //   await axios.put(
+        //     `http://localhost:5000/api/orders/${orderId}/status`,
+    await axios.put(
+  `${API_URL}/api/orders/${orderId}/status`,
+
         { status: newStatus },
         {
           headers: {

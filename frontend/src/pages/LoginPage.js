@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'// for making API calls calling backend
 import { useAuth } from '../context/AuthContext'
+import API_URL from '../config'
 
 const LoginPage = () => {
     const [email, setEmail] = useState(''); // Store what user types in form
@@ -19,7 +20,7 @@ const LoginPage = () => {
         try {
             setLoading(true);// Show loading
             const { data } = await axios.post( //calling our backend:
-                'http://localhost:5000/api/auth/login',
+                `${API_URL}/api/auth/login`,
                 { email, password }  // send this to backend
                 // data = response from backend (user info + token)
             );

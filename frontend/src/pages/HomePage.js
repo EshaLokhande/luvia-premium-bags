@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/cartContext'
-
+import API_URL from '../config'
 
 const HomePage = () => {
     const [products, setProducts] = useState([]);
@@ -15,8 +15,9 @@ const HomePage = () => {
   // fetches products from backend
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/products')
+        // const { data } = await axios.get('http://localhost:5000/api/products')
         // Get only first 4 products for homepage
+        const { data } = await axios.get(`${API_URL}/api/products`)
         setProducts(data.slice(0, 4))
       } catch (err) {
         console.log(err)
@@ -102,7 +103,8 @@ const HomePage = () => {
               >
                 {/* Product Image */}
                 <img
-                  src={`http://localhost:5000/${product.image}`}
+                  // src={`http://localhost:5000/${product.image}`}
+                  src={`${API_URL}/${product.image}`}
                   alt={product.name}
                   className='w-full h-64 object-cover'
                 />

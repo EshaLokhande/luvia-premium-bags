@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Link, useNavigate } from 'react-router-dom'
 import axios from 'axios'
+import API_URL from '../config'
 
 const AddProductPage = () => {
     const [name, setName] = useState('');
@@ -29,7 +30,9 @@ const AddProductPage = () => {
             formData.append('stock', stock);
             formData.append('image', image);
 
-            await axios.post('http://localhost:5000/api/products', formData, {
+            // await axios.post('http://localhost:5000/api/products',
+            //  formData, {
+            await axios.post(`${API_URL}/api/products`, formData ,{
                 headers: {
                     Authorization : `Bearer ${user.token}`
                 }
@@ -118,7 +121,7 @@ return (
         </div>
     </div>
 );
-
-
 }
+
+export default AddProductPage;
 

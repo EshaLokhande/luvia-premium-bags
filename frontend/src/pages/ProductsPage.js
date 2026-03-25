@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/cartContext'
+import API_URL from '../config'
 
 const ProductsPage = () => {
 
@@ -24,7 +25,8 @@ const ProductsPage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/products')
+        // const { data } = await axios.get('http://localhost:5000/api/products')
+        const { data } = await axios.get(`${API_URL}/api/products`)
         setProducts(data)
       } catch (err) {
         console.log(err)
@@ -127,7 +129,8 @@ const ProductsPage = () => {
               >
                 {/* Product Image */}
                 <img
-                  src={`http://localhost:5000/${product.image}`}
+                  // src={`http://localhost:5000/${product.image}`}
+                  src={`${API_URL}/${product.image}`}
                   alt={product.name}
                   className='w-full h-72 object-cover'
                 />

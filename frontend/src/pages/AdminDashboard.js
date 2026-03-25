@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { Link } from 'react-router-dom'
 import axios from 'axios'
-
+import API_URL from '../config'
 
 const AdminDashboard = () => {
     const { user } = useAuth();
@@ -13,12 +13,17 @@ const AdminDashboard = () => {
     useEffect(() => {
         const fetchStats = async () => {
             try {
-            const { data: products } = await axios.get(
-          'http://localhost:5000/api/products'
-        )
+        //     const { data: products } = await axios.get(
+        //   'http://localhost:5000/api/products'
+                // )
+                const { data: products } = await axios.get(
+  `${API_URL}/api/products`
+)
             setTotalProducts(products.length);
-         const { data: orders } = await axios.get(
-          'http://localhost:5000/api/orders',
+        //  const { data: orders } = await axios.get(
+                //   'http://localhost:5000/api/orders',
+            const { data: orders } = await axios.get(
+  `${API_URL}/api/orders`,
           {
             headers: {
               Authorization: `Bearer ${user.token}`

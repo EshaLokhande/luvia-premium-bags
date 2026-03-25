@@ -10,7 +10,7 @@ import CartPage from './pages/CartPage'
 import MyOrderPage from './pages/MyOrderPage'
 import AdminDashboard from './pages/AdminDashboard'
 import AddProductPage from './pages/AddProductPage'
-import AdminOrdersPage from './pages/AdminOrdersPage'
+import AdminOrdersPage from './pages/AdminOrderPage'
 
 function App() {
   return (
