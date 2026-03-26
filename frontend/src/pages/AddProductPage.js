@@ -1,6 +1,6 @@
 import React, { useState} from 'react'
 import { useAuth } from '../context/AuthContext'
-import { Link, useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import API_URL from '../config'
 
@@ -20,8 +20,20 @@ const AddProductPage = () => {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        if (!user?.token) {
+            setError('Please login as admin first');
+            navigate('/login');
+            return;
+        }
+
+        if (!image) {
+            setError('Please upload a product image');
+            return;
+        }
+
         try {
             setLoading(true);
+            setError('');
             const formData = new FormData();
             formData.append('name', name);
             formData.append('description', description);
@@ -39,7 +51,7 @@ const AddProductPage = () => {
             })
             navigate('/admin');
         } catch (error) {
-            setError('Error adding product');
+            setError(error.response?.data?.message || 'Error adding product');
         } finally {
             setLoading(false);
         }
@@ -80,12 +92,15 @@ return (
                     placeholder='Price'
                     value={price}
                     onChange={(e) => setPrice(e.target.value)}
+                    required
+                    min='0'
                 />
 
                 {/* category - dropdown! */}
                 <select
                     value={category}
                     onChange={(e) => setCategory(e.target.value)}
+                    required
                 >
                     <option value=''>Select category</option>
                     <option value='Tote'>Tote</option>
@@ -101,6 +116,8 @@ return (
                     placeholder='Stock'
                     value={stock}
                     onChange={(e) => setStock(e.target.value)}
+                    required
+                    min='0'
                 />
 
                 {/* image upload */}
@@ -109,6 +126,7 @@ return (
                     onChange={(e) => setImage(e.target.files[0])}
                     // hint: files[0] = first file
                     accept='image/*'
+                    required
                 // accept only images!
                 />
 

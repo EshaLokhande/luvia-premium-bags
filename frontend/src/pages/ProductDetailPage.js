@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import axios from 'axios'
 import { useCart } from '../context/cartContext'
-import { useAuth } from '../context/AuthContext'
 import API_URL from '../config'
 
 const ProductDetailPage = () => {
@@ -12,7 +11,6 @@ const ProductDetailPage = () => {
     const [quantity, setQuantity] = useState(1);
     const [added, setAdded] = useState(false); // to show "Added to cart!" message
     const { addToCart } = useCart();// Get addToCart from CartContext
-    const { user } = useAuth();// Get user from AuthContext
     const navigate = useNavigate();
     useEffect(() => {
         // Fetch product when page loads

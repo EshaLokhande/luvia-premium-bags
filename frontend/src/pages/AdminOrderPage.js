@@ -12,6 +12,11 @@ const AdminOrdersPage = () => {
 
   // 2. fetch all orders
   useEffect(() => {
+    if (!user?.token) {
+      setLoading(false)
+      return
+    }
+
     const fetchOrders = async () => {
       try {
         // const { data } = await axios.get(
@@ -32,7 +37,7 @@ const AdminOrdersPage = () => {
       }
     }
     fetchOrders()
-  }, [])
+  }, [user?.token])
 
   // 3. update order status function
   const updateStatus = async (orderId, newStatus) => {

@@ -11,6 +11,11 @@ const MyOrderPage = () => {
     const { user } = useAuth();
 
     useEffect(() => {
+      if (!user?.token) {
+        setLoading(false);
+        return;
+      }
+
         const fetchOrders = async () => {
             try {
               // const { data } = await axios.get(`http://localhost:5000/api/orders/myorders`, 
@@ -30,7 +35,7 @@ const MyOrderPage = () => {
             }
         }
         fetchOrders();
-    }, []);
+      }, [user?.token]);
 
     if (loading) {
         return (

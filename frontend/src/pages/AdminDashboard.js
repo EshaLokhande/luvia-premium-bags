@@ -11,6 +11,11 @@ const AdminDashboard = () => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
+        if (!user?.token) {
+            setLoading(false);
+            return;
+        }
+
         const fetchStats = async () => {
             try {
         //     const { data: products } = await axios.get(
@@ -38,7 +43,7 @@ const AdminDashboard = () => {
         }
     }
         fetchStats();
-    }, []);
+    }, [user?.token]);
 
 
     if (!user || !user.isAdmin) {
